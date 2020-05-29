@@ -1,0 +1,15 @@
+body {
+  text-align: left;
+  font-style: normal;
+  font-family: serif;
+  background-image: linear-gradient(lightcyan,deepskyblue, lightsteelblue);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+h5 {
+  font-weight: 550;
+}
+li {
+  font-weight: 600;
+}

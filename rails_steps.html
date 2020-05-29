@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="css/styles.css" rel="stylesheet" type="text/css">
+  <title>Rails Steps</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Rails Steps</h1>
+      
+        <h2> 1. $ rails new project_name (project name cannot be the name of any of your classes, must be unique)</h2>
+          <br>
+        <h2>2. Set up Gemfile add the following gems:</h2>
+          <li>(place just above the group :develompent :test do)</li>
+          <h5>gem 'jquery-rails'</h5>
+          <h5>gem 'bootstrap-sass', '~> 3.4.1'</h5>
+          <h5>gem 'sassc-rails', '>= 2.1.0'</h5>
+          <h5>gem 'faker'</h5>
+      
+        
+        
+          <h4>add these other gems below byebug</h4>
+        
+          <h5>group :development, :test do</h5>
+          <h5>gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]</h5>
+          <h5>gem 'rspec-rails'</h5>
+          <h5>gem 'launchy'</h5>
+          <h5>gem 'pry'</h5>
+          end
+        
+        
+          <h4>Below group :development, :test add a test group with this gem. i.e.</h4>
+        
+            <h5>group :test do</h5>
+            <h5>gem 'shoulda-matchers'</h5>
+            end
+        
+      
+            <h4>NOTE: When you add bootstrap & Sass gems make sure  you import them in 'app/assets/stylesheets/application.scss'</h4> 
+            <h4>youmust change the .css to .scss in your 'app/assets/stylesheets'</h4>
+            <h4>"bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"</h4>
+            <h5>@import "bootstrap-sprockets";</h5>
+            <h5>@import "bootstrap"</h5>
+            <h5>** Then, remove all the *= require_self and *= require_tree . statements from the sass file. Instead, use @import to
+            import Sass files. **</h5>
+      
+          <br>
+        <h2>3. $ bundle install</h2>
+          <br>
+        <h2>4. $ bundle exec rails generate rspec:install </h2>
+          <li>NOTE: This creates our familiar spec folder, a rails_helper.rb, and a spec_helper.rb.</li>
+          <br>
+        <h2>5. $ rake db:create</h2>
+          <li>NOTE: if you mess up for some reason run $ rake db:drop to drop the database</li>
+          <br>
+        <h2>6. $ rails generate migration create_somethings</h2>
+          <li>NOTE: 'something' is going to be the first table in your databse</li>
+          <br>
+        <h2>7. Navigate to db/migrate/'migration timestamp create_somethings'</h2>
+          <li>add what changes you'll be making in this migration</li>
+          <br>
+          <h4>EXAMPLE:</h4>
+          <h5>def change</h5>
+          <h5>create_table :something do |t|</h5>
+          <h5># Here we'll put code that specifies the changes we want to make to our database.</h5>
+          <h5># FOR EXAMPLE:</h5>
+          <h5># table column | column name | data type</h5>
+          <h5>t.column(:name, :string)</h5>
+          <h5>t.column(:year, :integer)</h5>
+          <br>
+          <h5>t.timestamps()</h5>
+          <h5>end</h5>
+          <h5>end</h5>
+          <br>
+        <h2>8. $ rake db:migrate</h2>
+          <br>
+        <h2>9. $ rake db:test:prepare</h2>
+          <br>
+          <li>NOTE: Prepares test database environment with new migration, add migrations as needed & follow steps 6 - 9 for every migration.</li>
+          <li>migrations should always be titled lower_snake_case for rails purposes IF you mess up a migration run one of the following commands:</li>
+          <li>$ rake db:rollback --> will roll back your most recent migration</li>
+          <br>
+        <h2>10. Create a app/models/something.rb</h2>
+          <br>
+          <li>NOTE: always make your classes singular UpperCamelCase (no - or _ rails will not read them)</li>
+          <li>always make your models.rb file singular lower_snake_case of your class name.</li>
+          <br>
+          <li>Example of text inside the something.rb:</li>
+          <h5> line 1) class Something < ApplicationRecord</h5> 
+          <h5>line 2) end</h5> 
+          <br>
+          <li>Now you have all CRUD functionality for this class because it inherites from ApplicationRecord NAMING CONVENTIONS:</li>
+          <li>Active Record requires that our class names be the singular, upper-camel-case form of our table names.</li>
+          <li>The names of our models should be the lower-snake-case form of your class names.</li>
+          <li>The Album class is backed by the albums table and written in the album.rb file.</li>
+          <li>Similarly, a CuteKitten class would be backed by the cute_kittens table and be in a file called cute_kitten.rb.</li> 
+          <li>SEE MORE INFO HERE: <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/active-record-naming-conventions">naming-conventions</a></li>
+          <br>
+          <h2>11. Follow along with steps 6-10 for any additional classes, be sure to add the instances of the parent class to the child class and vice versa.</h2>
+          
+            <li>Also be sure to add a foreign key to your child class & a :something_id column in your table so that you can connect the the child class TO the parent class.</li>
+            <li>FOR EXAMPLE:</li> 
+            <li>things is a CHILD of somethings $ rails g migration add_foreign_key_for_things the updated MODELs would look like so:</li>
+            <li>in your: 'app/models/thing.rb'</li> 
+            <h5>class Thing < ApplicationRecord</h5> 
+            <h5>belongs_to :something</h5>
+            <h5>end</h5> 
+            <li>in your: 'app/models/something.rb'</li> 
+            <h5>class Something < ApplicationRecord</h5>
+            <h5>has_many :things, dependent: :destroy</h5>
+            <h5>end</h5>
+            <br>
+          <h2>12. Now you want to test your logic</h2>
+            <li>open the rails console by typing: $ rails c</li>
+            <li>create some new "somethings" to be sure all of your data is correct.</li> 
+            <h5>something = Something.new</h5>
+            <li>When testing on this data use the create! method to see what the actual error is, otherwise things may fail silently.</li> 
+            <br>
+            <li>( check outthis link if youd like more info on testing logic in rails console.
+            <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/rails-console">Rails console</a></li>
+          
+          <h1>!!!!!!TESTING!!!!!!</h1> 
+            <br>
+          
+          <h2>13. We'll use Shoulda Matchers for our spec testing</h2> 
+            <li>navigate to: 'spec/rails_helper.rb' and insert the following code below the last end of the file:</li>
+            <h5>Shoulda::Matchers.configure do |config|</h5>
+            <h5>config.integrate do |with|</h5>
+            <h5>with.test_framework :rspec</h5>
+            <h5>with.library :rails</h5>
+            <h5>end</h5> 
+            <h5>end</h5> 
+            <br>
+        <h2>14. Now it's time to test in your rails project!</h2>
+            <li>Navigate to your 'spec' directory</li> 
+            <li>create 'models' directory to hold your class specs.</li> 
+            <li>Create your class spec files like so:</li> 
+            <li>Example of code inside your 'something_spec.rb'</li>
+            <h5>'spec/models/something_spec.rb'</h5> 
+            <h5>require 'rails_helper'</h5>
+            <h5>describe Something do</h5>
+            <h5># Tests will go here.</h5> 
+            <h5>it { should have_many(:things) }</h5>
+            <h5>end</h5>
+            <br>
+            <li>(check this page for more helpful tips on setting up tests. <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/testing-with-rspec-and-shoulda-matchers">shoulda-matchers gem</a></li>
+            <li>Then run $ rspec in your terminal per usual to test!</li> 
+            <li>You'll want to test each class so repeat this step for each class you've created!</li> 
+            <li>for example :</li> 
+            <h5>spec/models/thing_spec.rb</h5> 
+            <h5>require 'rails_helper'</h5> 
+            <h5>describe Thing do</h5>
+            <h5>it {should belong_to(:something) }</h5>
+            <h5>end</h5>
+            <br>
+          <h1>!!!!!ROUTING!!!!!!</h1> 
+            <br>
+          
+          <h2>15. Update the routes.rb to include full CRUD routing for each class:</h2> 
+          
+            <li>'config/routes.rb' IF you have PARENT & CHILD classes make sure you nest accordingly</li> 
+            <li>don't nest more than one, that's bad practice.</li>
+            <li>Rails.application.routes.draw do root to:</li>
+            <h5>'somethings#index'</h5>
+            <h5>resources :somethings do</h5>
+            <h5>resources :things</h5>
+            <h5>end</h5>
+            <h5>end</h5>
+            <li>to check your routes run: $ rake routes See more info about routing in rails
+            here: <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/rails-routes">Rails routes</a></li>
+            <br>
+          
+          <h2>16. Now we'll need to add some Controllers for our Something class:</h2> 
+          
+            <li>'app/controllers/somethings_conotroller.rb'</li> 
+            <li>See the full info here: <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/rails-controllers">Rails controllers</a></li>
+            <li>Basic Example: class</li>
+            <h5>SomethingsController < ApplicationController</h5> 
+            <h5>def index</h5> 
+            <h5># Code for listing all albums goes here.</h5> 
+            <h5>end</h5>
+            <h5>def new</h5> 
+            <h5># Code for new album form goes here.</h5>
+            <h5>end</h5> 
+            <h5>def create</h5>
+            <h5># Code for creating a new album goes here.</h5> 
+            <h5>end</h5> 
+            <h5>def edit</h5> 
+            <h5># Code for edit album form goes here.</h5> 
+            <h5>end</h5> 
+            <h5>def show</h5> 
+            <h5># Code for showing a single album goes here.</h5>
+            <h5>end</h5>
+            <h5>def update</h5>
+            <h5># Code for updating an album goes here.</h5> 
+            <h5>end</h5>
+            <h5>def destroy</h5> 
+            <h5># Code for deleting an album goes here.</h5> 
+            <h5>end</h5>
+            <h5>end</h5> 
+            <br>
+          <h2>17. Now create your views & start your server BRAH!</h2>
+            <li>app/views/things/index.html.erb|__new.html.erb|__edit.html.erb|__show.html.erb See more</li>
+            <li>documentation here: <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/rails-views">Rails Views</a></li> 
+            <li>run command:</li>
+            <h5>$ rails s in the terminal to launch you rails server.</h5>
+          <br>
+          <h2>FRIDAY PROJECT Objectives:</h2> 
+          <li>Does the project include thorough unit and integration test coverage? </li>
+          <li>Do routes follow properconvention, including a root route? </li>
+          <li>Does the project have the required validations <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/active-record-validations">Rails
+            validations</a></li>  
+          <li>Does the project have required callbacks <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/active-record-callbacks?">Rails callbacks</a></li>
+          <li>Does the project have the three scopes specified in the prompt? Are the scopes properly utilized in views?<a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/database-scopes">Rails scopes</a></li>
+         <li>Is the databaseproperly seeded with the Faker gem?<a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/seeding-with-faker">Faker gem</a></li>
+          <li><a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/seeding-a-database"></a>seeding-a-database</li> 
+          <li>Are success and error flash messages used correctly? ERROR MESSAGES: <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/partials"></a></li>
+          <li>FLASH MESSAGES: <a href="https://www.learnhowtoprogram.com/ruby-and-rails/rails-with-active-record/application-layout-and-flash-messages"></a></li>
+          <br>
+          <br>
+          
+
+      
+  </div>
+</body>
+</html>
+
+
+
+
+
+
